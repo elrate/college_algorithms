@@ -1,5 +1,4 @@
-//Criando uma lista e matrix de adjacencia
-
+//Implementando uma lista e matrix de adjacencia
 #include <stdio.h>
 #include <stdlib.h>
 
