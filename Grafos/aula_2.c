@@ -1,4 +1,4 @@
-//Implementado busca em profundidade
+//Implementando busca em profundidade
 
 #include <stdio.h>
 #include <stdlib.h>
