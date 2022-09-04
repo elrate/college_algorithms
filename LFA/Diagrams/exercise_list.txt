@@ -1,1 +1,1 @@
-1 -> Exercício 02.201 -> {Desenvolva um autômato finito determinístico sobre o alfabeto Σ = {w, x, y, z} que reconheça a linguagem L = {w | w possui wxy ou xyy ou zwx como prefixo, xyz ou xzw ou ywz como subpalavra e wxz ou yzy ou zyw como sufixo}.}
+1 -> Exercício 02.201 -> {Desenvolva um autômato finito determinístico sobre o alfabeto Σ = {w, x, y, z} que reconheça a linguagem L = {w | w possui wxy ou xyy ou zwx como prefixo, xyz ou xzw ou ywz como subpalavra e wxz ou yzy ou zyw como sufixo}.} --> OK
