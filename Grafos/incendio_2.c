@@ -76,8 +76,8 @@ int main(){
         total_comb = 1;
         for(int i = 0;i<count;i++){
             total_comb = total_comb * qtd_lideres[i];
-            total_comb = total_comb % 1000000007;
         }
+        total_comb = total_comb % 1000000007;
         printf("%llu %llu\n",count, total_comb);
         free(qtd_lideres);
         free(vertices);
