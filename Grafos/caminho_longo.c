@@ -32,7 +32,7 @@ int main(){
     vertice *vertices;
     int par_2 = 0;
     int par_1 = 0;
-    int ultimo;
+    int ultimo = 0;
     int primeiro;
     
     scanf("%d",&qtd_vertices);
@@ -60,6 +60,8 @@ int main(){
 
     dfs(vertices,primeiro,0,&ultimo,1);
     int dnv = ultimo;
+    printf("%d\n",dnv);
+    ultimo = 0;
     dfs(vertices,dnv,0,&ultimo,2);
 
     printf("%d\n",vertices[ultimo].distancia);
@@ -133,7 +135,11 @@ void dfs(vertice *vertices , int x, int distancia,int *ultimo, int ver_visit){
     if(vertices[x].visitado == ver_visit){
         return;
     }
-    (*ultimo) = x;
+    printf("x:%d\n",x);
+    printf("ultimo:%d\n",*ultimo);
+    if(vertices[(*ultimo)].distancia < vertices[x].distancia)
+        (*ultimo) = x;
+
     vertices[x].visitado = ver_visit;
 
     if (vertices[x].lista_adj==NULL)
