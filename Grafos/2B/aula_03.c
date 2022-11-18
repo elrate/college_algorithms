@@ -4,7 +4,8 @@
 //n log n - kruskal
 
 typedef struct par{
-    int vertice;
+    int vertice_1;
+    int vertice_2;
     int distancia;
 }par;
 typedef struct lista
@@ -27,11 +28,10 @@ typedef struct vertices {
 
 registro *aloca_registro();
 lista *aloca_lista();
-void incluir_lista(lista *l, int vertice,int distancia);
+void incluir_lista(lista *l, int vertice_1,int vertice_2,int distancia);
 void mostrar_lista(lista *l);
 par remover(lista *l);
 int empty(lista *l);
-void mostrar_grafo(vertice *vertices, int qtd_vertices);
 
 int main(){
 
@@ -39,6 +39,9 @@ int main(){
     int qtd_vertices, qtd_arestas,par_1,par_2,peso,raiz;
     vertice * vertices;
     par p;
+    lista *l;
+
+    l = aloca_lista();
 
     printf("\nDigite a quantidade de Vertices e Arestas: ");
     scanf("%d %d",&qtd_vertices, &qtd_arestas);
@@ -49,9 +52,11 @@ int main(){
         printf("\nDigite os vertices ligados e o seu peso: ");
         scanf("%d %d %d",&par_1,&par_2,&peso);
         
+        incluir_lista(l,par_1,par_2,peso);
         //Colocar em uma lista(min heap)
     }
 
+    mostrar_lista(l);
     //Criar funcao que analisa as arestas(criar o grafo) e verificar se tem ciclo
     //Utilizar in out para verificar se tem ciclo
 
@@ -72,7 +77,7 @@ registro *aloca_registro()
     return novo_registro;
 }
 
-void incluir_lista(lista *l, int vertice,int distancia){
+void incluir_lista(lista *l, int vertice_1,int vertice_2,int distancia){
     
     if (l == NULL)
         return;
@@ -80,7 +85,8 @@ void incluir_lista(lista *l, int vertice,int distancia){
     registro *novo, *aux = NULL, *ant = NULL;
     
     novo = aloca_registro();
-    novo->p.vertice = vertice;
+    novo->p.vertice_1 = vertice_1;
+    novo->p.vertice_2 = vertice_2;
     novo->p.distancia = distancia;
 
     if (l->inicio == NULL)
@@ -114,7 +120,8 @@ par remover(lista *l){
     par par_removido;
 
     if(l->inicio == NULL){
-        par_removido.vertice = -1;
+        par_removido.vertice_1 = -1;
+        par_removido.vertice_2 = -1;
         par_removido.distancia = -1;
     }else{
         registro *aux;
@@ -122,7 +129,8 @@ par remover(lista *l){
         aux = l->inicio;
         l->inicio = aux->prox;
 
-        par_removido.vertice = aux->p.vertice;
+        par_removido.vertice_1 = aux->p.vertice_1;
+        par_removido.vertice_2 = aux->p.vertice_2;
         par_removido.distancia = aux->p.distancia;
 
         l->qtd--;
@@ -144,10 +152,8 @@ void mostrar_lista(lista *l){
 
     aux = l->inicio;
     while (aux != NULL){
-        printf("(%d %d)\n", aux->p.vertice,aux->p.distancia);
+        printf("(%d %d |%d|)\n", aux->p.vertice_1,aux->p.vertice_2,aux->p.distancia);
         aux = aux->prox;
     }
     printf("\n");
 }
-
-void mostrar_grafo(vertice *vertices, int qtd_vertices){
