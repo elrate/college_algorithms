@@ -38,43 +38,42 @@ void bfs(vertice *vertices, int raiz);
 
 int main(int *argc, char *argv[])
 {
-    int qtd_vertices, qtd_arestas, raiz, par_1, par_2;
+    int qtd_vertices, qtd_arestas, par_1, par_2, qtd_testes;
     vertice *vertices;
-    int maior = 0;
+    int *vetor_result;
 
-    vertices = aloca_vertice();
+    vetor_result = (int*)malloc(sizeof(int));
 
-    scanf("%d %d",&qtd_vertices, &qtd_arestas);
+    scanf("%d", &qtd_testes);
 
-    for(int i = 0; i < (qtd_arestas);i++){
+    for(int i = 0; i < qtd_testes;i++){
+        vertices = aloca_vertice();
+        scanf("%d %d",&qtd_vertices, &qtd_arestas);
 
-        scanf("%d %d",&par_1,&par_2);
+        for(int i = 0; i < (qtd_arestas);i++){
 
-        if (vertices[par_1].lista_adj == NULL){
-            vertices[par_1].lista_adj = aloca_lista();
+            scanf("%d %d",&par_1,&par_2);
+
+            if (vertices[par_1].lista_adj == NULL){
+                vertices[par_1].lista_adj = aloca_lista();
+            }
+
+            incluir_lista(vertices[par_1].lista_adj,par_2);
+
+            if (vertices[par_2].lista_adj == NULL){    
+                vertices[par_2].lista_adj = aloca_lista();
+            }
+
+            incluir_lista(vertices[par_2].lista_adj,par_1);
         }
-
-        incluir_lista(vertices[par_1].lista_adj,par_2);
-
-        if (vertices[par_2].lista_adj == NULL){    
-            vertices[par_2].lista_adj = aloca_lista();
-        }
-
-        incluir_lista(vertices[par_2].lista_adj,par_1);
+        bfs(vertices,1);
+        vetor_result[i] = vertices[qtd_vertices].distancia;
+        free(vertices);
     }
-
-    scanf("%d", &raiz);
-
-    bfs(vertices,raiz);
-
-    for(int i = 1; i <= qtd_vertices; i++){
-        printf("vertice: %d - distancia = %d\n",i,vertices[i].distancia);
-        if(maior < vertices[i].distancia){
-            maior = vertices[i].distancia;
-        }
+    for(int i = 0; i < qtd_testes;i++){
+        printf("\n%d",vetor_result[i]);
     }
-    printf("menor = %d\n",vertices[qtd_vertices].distancia);
-
+    printf("\n");
     return 0;
 }
 
