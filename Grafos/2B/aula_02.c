@@ -38,24 +38,7 @@ int main(){
     int qtd_vertices, qtd_arestas,par_1,par_2,peso,raiz;
     vertice * vertices;
     par p;
-//----------------------------Teste_do_min_heap---------------------------------------------------------
-    /*
-    lista *l;
-    l = aloca_lista();
 
-    incluir_lista(l,1,5);
-    incluir_lista(l,2,3);
-    incluir_lista(l,6,1);
-    mostrar_lista(l);
-
-    p = remover(l);
-    printf("Vertice Removido: %d \nDistancia: %d\n",p.vertice,p.distancia);
-    mostrar_lista(l);
-
-    incluir_lista(l,8,2);
-    mostrar_lista(l);
-    */
-//----------------------------------------------------------------------------------------------------
     printf("\nDigite a quantidade de Vertices e Arestas: ");
     scanf("%d %d",&qtd_vertices, &qtd_arestas);
 
@@ -203,16 +186,22 @@ void dijkstra(vertice * vertices, int raiz){
 
     vertices[raiz].distancia = 0;
 
+    //Inclui na fila de memoria
     incluir_lista(l,raiz,0);
 
     while(!empty(l)){
+        //Retira da fila o primeiro registro
         ret = remover(l);
         for(int i = 0; i < vertices[ret.vertice].tam_lista_adj; i++){
 
+            //Calcula a distancia entre um vertice e o outro
             soma_distancia_peso = ret.distancia + vertices[ret.vertice].lista_adj[i].distancia;
+            //Salva o valor do vertice da iteracao da lista adjacente
             valor = vertices[ret.vertice].lista_adj[i].vertice;
 
+            //Verifica se a distancia nova e menor que a atual
             if(soma_distancia_peso < vertices[valor].distancia){
+                //Se for ele atualiza, e coloca na fila
                 vertices[valor].distancia = soma_distancia_peso;
                 incluir_lista(l,valor,soma_distancia_peso);
             }
