@@ -190,7 +190,7 @@ void dijkstra(vertice * vertices, int raiz){
     incluir_lista(l,raiz,0);
 
     while(!empty(l)){
-        //Retira da fila o primeiro registro
+        //Retira da fila o primeiro registro (menor distancia)
         ret = remover(l);
         for(int i = 0; i < vertices[ret.vertice].tam_lista_adj; i++){
 
