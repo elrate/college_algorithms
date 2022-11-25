@@ -49,24 +49,14 @@ void ponte(vertice * vertices, int qtd_vertices, int raiz, int pai)
 
     for(int i=0;i<vertices[raiz].tam_lista_adj;i++){
         filho = vertices[raiz].lista_adj[i];
-        //Verifico se o vertice visitado e o pai dele
         if (filho != pai){
-            //Se não for o pai
-            //Verifica se o vertice ja foi visitado
             if (vertices[filho].visitado == 1){
-                //back edge
-                //Isso e um ciclo
-                //Atualiza o lower do atual
                 vertices[raiz].lower = menor(vertices[raiz].lower,vertices[filho].in);
             }else{
-                //forward edge
                 ponte(vertices,qtd_vertices,filho,raiz);
-
-                //Ao termina a lista de um vertice, verifica se tem ponte
                 if (vertices[filho].lower > vertices[raiz].in){
                     printf("\nA estrada de que conecta a cidade %d e %d nao pode entrar em reforma.\n", raiz, filho);
                 }
-                //Ao final atualizar o lower do atual
                 vertices[raiz].lower = menor(vertices[raiz].lower, vertices[filho].lower);
             }
         }
