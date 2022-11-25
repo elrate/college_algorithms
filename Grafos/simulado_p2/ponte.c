@@ -4,7 +4,7 @@
 typedef struct vertice
 {
     int visitado;
-    int lista_adj[1000];
+    int lista_adj[100000];
     int tam_lista_adj;
     int in;
     int lower;
