@@ -1,21 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void busca_binaria(double vetor[],double area,double inicio,int qtd_placas,double maior,double *metade);
+void busca_binaria(double vetor[],double area_esp,double inicio,int qtd_placas,double maior,double *metade);
 double soma_cima(double meio,double vetor[],int qtd_placas);
 
 int main(){
 
     double *vetor;
-    double metade;
+    double metade,area_esp,maior,area_total;
     int qtd_placas;
-    double verificador;
-    double area,maior,area_total;
+
     maior = 0;
     area_total = 0;
 
     scanf("%d",&qtd_placas);
-    scanf("%lf",&area);
+    scanf("%lf",&area_esp);
 
     vetor = (double*)calloc(qtd_placas,sizeof(double));
 
@@ -31,12 +30,12 @@ int main(){
         }
     }
 
-    if(area_total == area){
+    if(area_total == area_esp){
         printf(":D\n");
-    }else if(area_total < area){
+    }else if(area_total < area_esp){
         printf("-.-\n");
     }else{
-        busca_binaria(vetor,area,0,qtd_placas,maior,&metade);
+        busca_binaria(vetor,area_esp,0,qtd_placas,maior,&metade);
         printf("%.4lf\n",metade);
         printf(":D\n");
     }
@@ -44,20 +43,19 @@ int main(){
     return 0;
 }
 
-void busca_binaria(double vetor[],double area,double inicio, int qtd_placas,double maior,double *metade){
+void busca_binaria(double vetor[],double area_esp,double inicio, int qtd_placas,double maior,double *metade){
 
     double area_calculada;
 
-    while(inicio - maior >= 0.00000001){
+    while((maior - inicio) >= 0.00000000001){
         
         (*metade) = (inicio + maior)/2;
-        printf("metade = %lf\n",(*metade));
 
         area_calculada = soma_cima((*metade),vetor,qtd_placas);
-        if(area_calculada == area){
+        if(area_calculada == area_esp){
             return;
         }else{
-            if(area_calculada < area){
+            if(area_calculada > area_esp){
                 inicio = (*metade);
             }else{
                 maior = (*metade);
