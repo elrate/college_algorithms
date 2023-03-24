@@ -10,7 +10,6 @@ int main(){
     double metade,area_esp,maior,area_total;
     int qtd_placas,acesso = 1;
 
-
     while(acesso){
         maior = 0;
         area_total = 0;
@@ -37,6 +36,7 @@ int main(){
             busca_binaria(vetor,area_esp,qtd_placas,0,maior,&metade);
             printf("%.4lf\n",metade);
         }
+        free(vetor);
     }
 
     return 0;
