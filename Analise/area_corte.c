@@ -8,31 +8,35 @@ int main(){
 
     double *vetor;
     double metade,area_esp,maior,area_total;
-    int qtd_placas;
+    int qtd_placas,acesso = 1;
 
-    maior = 0;
-    area_total = 0;
 
-    scanf("%d",&qtd_placas);
-    scanf("%lf",&area_esp);
+    while(acesso){
+        maior = 0;
+        area_total = 0;
+        scanf("%d",&qtd_placas);
+        scanf("%lf",&area_esp);
 
-    vetor = (double*)calloc(qtd_placas,sizeof(double));
+        if(qtd_placas == 0 && area_esp == 0)
+            return 0;
 
-    for(int i=0; i<qtd_placas; i++){
-        scanf("%lf",&vetor[i]);
-        area_total = area_total + vetor[i];
-        if(maior < vetor[i])
-            maior = vetor[i];
-    }
+        vetor = (double*)calloc(qtd_placas,sizeof(double));
 
-    if(area_total == area_esp)
-        printf(":D\n");
-    else if(area_total < area_esp)
-        printf("-.-\n");
-    else{
-        busca_binaria(vetor,area_esp,qtd_placas,0,maior,&metade);
-        printf("%.4lf\n",metade);
-        printf(":D\n");
+        for(int i=0; i<qtd_placas; i++){
+            scanf("%lf",&vetor[i]);
+            area_total = area_total + vetor[i];
+            if(maior < vetor[i])
+                maior = vetor[i];
+        }
+
+        if(area_total == area_esp)
+            printf(":D\n");
+        else if(area_total < area_esp)
+            printf("-.-\n");
+        else{
+            busca_binaria(vetor,area_esp,qtd_placas,0,maior,&metade);
+            printf("%.4lf\n",metade);
+        }
     }
 
     return 0;
