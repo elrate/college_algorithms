@@ -55,22 +55,37 @@ probabilidade_chuva['nao'] = fuzz.trimf(probabilidade_chuva.universe, [30, 100, 
 
 # Exemplo de regras para todas as combinações de sensores
 regra1 = ctrl.Rule(
-    sensor1['baixo'] & sensor2['baixo'] & sensor3['baixo'] & sensor4['baixo'] & sensor5['baixo'],
+    (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['medio'] or sensor3['alto'] or sensor3['muito_alto']) & (sensor4['baixo'] or sensor4['muito_baixo']) & (sensor5['baixo'] or sensor5['muito_baixo']),
     probabilidade_chuva['sim']
 )
 
 regra2 = ctrl.Rule(
-    sensor1['medio'] & sensor2['baixo'] & sensor3['alto'] & sensor4['alto'] & sensor5['baixo'],
-    probabilidade_chuva['nao']
+    (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['medio'] or sensor3['alto'] or sensor3['muito_alto']) & (sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['baixo'] or sensor5['muito_baixo']),
+    probabilidade_chuva['sim']
 )
 
 regra3 = ctrl.Rule(
-    sensor1['alto'] & sensor2['medio'] & sensor3['medio'] & sensor4['alto'] & sensor5['alto'],
+    (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['baixo'] or sensor5['muito_baixo']),
+    probabilidade_chuva['nao']
+)
+
+regra4 = ctrl.Rule(
+    (sensor1['alto'] or sensor1['muito_alto']) & (sensor2['alto'] or sensor2['muito_alto']) & (sensor3['alto'] or sensor3['muito_alto']) & (sensor4['alto'] or sensor4['muito_alto']) & (sensor5['alto'] or sensor5['muito_alto']),
+    probabilidade_chuva['nao']
+)
+
+regra5 = ctrl.Rule(
+    (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['baixo'] or sensor4['muito_baixo']) & (sensor5['baixo'] or sensor5['muito_baixo']),
+    probabilidade_chuva['nao']
+)
+
+regra6 = ctrl.Rule(
+    (sensor1['baixo'] or sensor1['muito_baixo'] or sensor1['medio'] or sensor1['alto'] or sensor1['muito_alto']) & (sensor2['alto'] or sensor2['muito_alto']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['muito_baixo'] or sensor4['baixo'] or sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['alto'] or sensor5['muito_alto']),
     probabilidade_chuva['nao']
 )
 
 # Criando um sistema de controle fuzzy
-sistema_ctrl = ctrl.ControlSystem([regra1, regra2, regra3])
+sistema_ctrl = ctrl.ControlSystem([regra1, regra2, regra3, regra4, regra5, regra6])
 
 # Criando uma simulação
 simulacao = ctrl.ControlSystemSimulation(sistema_ctrl)
@@ -78,7 +93,7 @@ simulacao = ctrl.ControlSystemSimulation(sistema_ctrl)
 # Valores dos sensores
 valor_sensor1 = 2500  # Intensidade de luz em lux (dentro do intervalo de 0 a 10000)
 valor_sensor2 = 12    # Temperatura em graus Celsius (dentro do intervalo de 0 a 50)
-valor_sensor3 = 26    # Umidade relativa do ar em % (dentro do intervalo de 0 a 100)
+valor_sensor3 = 44    # Umidade relativa do ar em % (dentro do intervalo de 0 a 100)
 valor_sensor4 = 6    # Velocidade do vento em km/h (dentro do intervalo de 0 a 20)
 valor_sensor5 = 960   # Leitura do sensor de barômetro em hPa (dentro do intervalo definido)
 
