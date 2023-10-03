@@ -10,8 +10,8 @@ sensor3 = ctrl.Antecedent(np.arange(0, 101, 1), 'Sensor 3')    # Umidade relativ
 sensor4 = ctrl.Antecedent(np.arange(0, 21, 1), 'Sensor 4')     # Velocidade do vento (em km/h)
 sensor5 = ctrl.Antecedent(np.arange(900, 1101, 1), 'Sensor 5') # Barômetro (hPa)
 
-# Definindo o consequente (probabilidade de chuva)
-probabilidade_chuva = ctrl.Consequent(np.arange(0, 101, 1), 'Probabilidade Chuva')
+# Definindo o consequente (previsão do tempo)
+previsao = ctrl.Consequent(np.arange(0, 101, 1), 'Previsao Tempo')
 
 # Definindo funções de pertinência para os antecedentes e o consequente
 # Funções de pertinência para o Sensor 1 (Luz em lux)
@@ -49,39 +49,39 @@ sensor5['medio'] = fuzz.gaussmf(sensor5.universe, 1000, 10)
 sensor5['alto'] = fuzz.trimf(sensor5.universe, [1025, 1045, 1065])
 sensor5['muito_alto'] = fuzz.trapmf(sensor5.universe, [1050, 1075, 1100, 1100])
 
-probabilidade_chuva['sim'] = fuzz.trimf(probabilidade_chuva.universe, [0, 0, 50])
-probabilidade_chuva['nao'] = fuzz.trimf(probabilidade_chuva.universe, [30, 100, 100])
+previsao['tempo_chuvoso'] = fuzz.trimf(previsao.universe, [0, 0, 50])
+previsao['tempo_ensolarado'] = fuzz.trimf(previsao.universe, [30, 100, 100])
 
 
 # Exemplo de regras para todas as combinações de sensores
 regra1 = ctrl.Rule(
     (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['medio'] or sensor3['alto'] or sensor3['muito_alto']) & (sensor4['baixo'] or sensor4['muito_baixo']) & (sensor5['baixo'] or sensor5['muito_baixo']),
-    probabilidade_chuva['sim']
+    previsao['tempo_chuvoso']
 )
 
 regra2 = ctrl.Rule(
     (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['medio'] or sensor3['alto'] or sensor3['muito_alto']) & (sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['baixo'] or sensor5['muito_baixo']),
-    probabilidade_chuva['sim']
+    previsao['tempo_chuvoso']
 )
 
 regra3 = ctrl.Rule(
     (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['baixo'] or sensor5['muito_baixo']),
-    probabilidade_chuva['nao']
+    previsao['tempo_ensolarado']
 )
 
 regra4 = ctrl.Rule(
     (sensor1['alto'] or sensor1['muito_alto']) & (sensor2['alto'] or sensor2['muito_alto']) & (sensor3['alto'] or sensor3['muito_alto']) & (sensor4['alto'] or sensor4['muito_alto']) & (sensor5['alto'] or sensor5['muito_alto']),
-    probabilidade_chuva['nao']
+    previsao['tempo_ensolarado']
 )
 
 regra5 = ctrl.Rule(
     (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['baixo'] or sensor4['muito_baixo']) & (sensor5['baixo'] or sensor5['muito_baixo']),
-    probabilidade_chuva['nao']
+    previsao['tempo_ensolarado']
 )
 
 regra6 = ctrl.Rule(
     (sensor1['baixo'] or sensor1['muito_baixo'] or sensor1['medio'] or sensor1['alto'] or sensor1['muito_alto']) & (sensor2['alto'] or sensor2['muito_alto']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['muito_baixo'] or sensor4['baixo'] or sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['alto'] or sensor5['muito_alto']),
-    probabilidade_chuva['nao']
+    previsao['tempo_ensolarado']
 )
 
 # Criando um sistema de controle fuzzy
@@ -107,9 +107,9 @@ simulacao.input['Sensor 5'] = valor_sensor5
 # Computando a saída
 simulacao.compute()
 
-# Obtendo a saída (nível de acionamento do varal)
-porcentagem_chuva = simulacao.output['Probabilidade Chuva']
-print(f'Probabilidade de Chuva: {porcentagem_chuva:.2f}%')
+# Obtendo a saída
+probabilidade_tempo = simulacao.output['Previsao Tempo']
+print(f'Previsão do tempo(%): {probabilidade_tempo:.2f}%')
 
 # Visualizando as funções de pertinência
 # Visualização do Sensor 1
@@ -147,27 +147,27 @@ plt.ylabel('Pertinência')
 plt.title('Funções de Pertinência - Sensor de Barômetro')
 plt.show()
 
-# Probabilidade Chuva
-probabilidade_chuva.view()
-plt.xlabel('Probabilidade de Chuva (%)')
+# Probabilidade Do Tempo
+previsao.view()
+plt.xlabel('Previsão do Tempo (%)')
 plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência - Probabilidade de chuva')
+plt.title('Funções de Pertinência - Probabilidade de sol e chuva')
 plt.show()
 
-# Obtendo a saída (porcentagem de chuva)
-porcentagem_chuva = simulacao.output['Probabilidade Chuva']
+# Obtendo a saída (porcentagem da probabilidade do tempo)
+probabilidade_tempo = simulacao.output['Previsao Tempo']
 
-# Plotando as funções de probabilidade chuva
-probabilidade_chuva.view(sim=simulacao)
+# Plotando as funções de previsao do tempo
+previsao.view(sim=simulacao)
 
 # Adicionando uma linha vertical indicando o ponto de acionamento
-plt.axvline(x=porcentagem_chuva, color='red', linestyle='--', label=f'Nível: {porcentagem_chuva:.2f}%')
+plt.axvline(x=probabilidade_tempo, color='red', linestyle='--', label=f'Nível: {probabilidade_tempo:.2f}%')
 
 # Configurando o gráfico
 plt.legend()
-plt.xlabel('Probabilidade De Chuva')
+plt.xlabel('Probabilidade da Previsão do Tempo')
 plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência da Probabilidade de Chuva')
+plt.title('Funções de Pertinência da Previsão do Tempo')
 
 
 # Exibindo o gráfico
