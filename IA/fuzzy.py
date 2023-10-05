@@ -49,53 +49,85 @@ sensor5['medio'] = fuzz.gaussmf(sensor5.universe, 1000, 10)
 sensor5['alto'] = fuzz.trimf(sensor5.universe, [1025, 1045, 1065])
 sensor5['muito_alto'] = fuzz.trapmf(sensor5.universe, [1050, 1075, 1100, 1100])
 
-previsao['tempo_chuvoso'] = fuzz.trimf(previsao.universe, [0, 0, 50])
-previsao['tempo_ensolarado'] = fuzz.trimf(previsao.universe, [30, 100, 100])
+previsao['desativado'] = fuzz.trimf(previsao.universe, [0, 0, 50])
+previsao['ativado'] = fuzz.trimf(previsao.universe, [30, 100, 100])
 
 
 # Exemplo de regras para todas as combinações de sensores
+
 regra1 = ctrl.Rule(
-    (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['medio'] or sensor3['alto'] or sensor3['muito_alto']) & (sensor4['baixo'] or sensor4['muito_baixo']) & (sensor5['baixo'] or sensor5['muito_baixo']),
-    previsao['tempo_chuvoso']
-)
-
+    (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
+    (sensor2['muito_baixo'] | sensor2['baixo']) &
+    (sensor3['medio'] | sensor3['alto'] | sensor3['muito_alto']) &
+    (sensor4['medio'] | sensor4['alto'] | sensor4['muito_alto']) &
+    (sensor5['muito_baixo'] | sensor5['baixo']),
+    previsao['desativado']
+) # Condições Perfeitas de Chuva
 regra2 = ctrl.Rule(
-    (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['medio'] or sensor3['alto'] or sensor3['muito_alto']) & (sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['baixo'] or sensor5['muito_baixo']),
-    previsao['tempo_chuvoso']
-)
-
+    (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto'])  &
+    (sensor2['medio']) &
+    (sensor3['alto'] | sensor3['muito_alto']) &
+    (sensor4['medio'] | sensor4['alto'] | sensor4['muito_alto']) &
+    (sensor5['medio']),
+    previsao['desativado']
+) # Umidade muita alta de dia com temperatura e pressão media e com vento
 regra3 = ctrl.Rule(
-    (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['baixo'] or sensor5['muito_baixo']),
-    previsao['tempo_ensolarado']
-)
-
+    (sensor1['muito_baixo'] | sensor1['baixo']),
+    previsao['desativado']
+) # De noite
 regra4 = ctrl.Rule(
-    (sensor1['alto'] or sensor1['muito_alto']) & (sensor2['alto'] or sensor2['muito_alto']) & (sensor3['alto'] or sensor3['muito_alto']) & (sensor4['alto'] or sensor4['muito_alto']) & (sensor5['alto'] or sensor5['muito_alto']),
-    previsao['tempo_ensolarado']
-)
-
+    (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
+    (sensor2['medio'] | sensor2['alto'] | sensor2['muito_alto']) &
+    (sensor3['muito_baixo'] | sensor3['baixo']) &
+    (sensor4['muito_baixo'] | sensor4['baixo'] | sensor4['medio']) &
+    (sensor5['medio'] | sensor5['alto'] | sensor5['muito_alto']),
+    previsao['ativado']
+) # Condições Perfeita de Sol
 regra5 = ctrl.Rule(
-    (sensor1['baixo'] or sensor1['muito_baixo']) & (sensor2['baixo'] or sensor2['muito_baixo']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['baixo'] or sensor4['muito_baixo']) & (sensor5['baixo'] or sensor5['muito_baixo']),
-    previsao['tempo_ensolarado']
-)
-
+    (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
+    (sensor2['muito_alto']) &
+    (sensor3['medio']) &
+    (sensor4['muito_baixo'] | sensor4['baixo']  | sensor4['medio']) &
+    (sensor5['muito_alto']),
+    previsao['ativado']
+) # Temperatura e pressão muito alta, umidade media e vento muito baixo -> médio
 regra6 = ctrl.Rule(
-    (sensor1['baixo'] or sensor1['muito_baixo'] or sensor1['medio'] or sensor1['alto'] or sensor1['muito_alto']) & (sensor2['alto'] or sensor2['muito_alto']) & (sensor3['baixo'] or sensor3['muito_baixo']) & (sensor4['muito_baixo'] or sensor4['baixo'] or sensor4['medio'] or sensor4['alto'] or sensor4['muito_alto']) & (sensor5['alto'] or sensor5['muito_alto']),
-    previsao['tempo_ensolarado']
-)
+    (sensor1['alto'] | sensor1['muito_alto']) &
+    (sensor2['alto'] | sensor2['muito_alto']) &
+    (sensor3['alto'] | sensor3['muito_alto']) &
+    (sensor4['alto'] | sensor4['muito_alto']) &
+    (sensor5['alto'] | sensor5['muito_alto']),
+    previsao['ativado']
+) # Tudo alto e muito alto
+regra7 = ctrl.Rule(
+    (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
+    (sensor2['baixo'] | sensor2['muito_baixo']) &
+    (sensor3['baixo'] | sensor3['muito_baixo']) &
+    (sensor4['baixo'] | sensor4['muito_baixo']) &
+    (sensor5['baixo'] | sensor5['muito_baixo']),
+    previsao['ativado']
+) # Tudo baixo e muito baixo
+regra8 = ctrl.Rule(
+    (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
+    (sensor2['medio']) &
+    (sensor3['medio']) &
+    (sensor4['medio']) &
+    (sensor5['medio']),
+    previsao['ativado']
+) # Tudo Médio
 
 # Criando um sistema de controle fuzzy
-sistema_ctrl = ctrl.ControlSystem([regra1, regra2, regra3, regra4, regra5, regra6])
+sistema_ctrl = ctrl.ControlSystem([regra1,regra2,regra3,regra4,regra5,regra6,regra7,regra8])
 
 # Criando uma simulação
 simulacao = ctrl.ControlSystemSimulation(sistema_ctrl)
 
 # Valores dos sensores
-valor_sensor1 = 2500  # Intensidade de luz em lux (dentro do intervalo de 0 a 10000)
-valor_sensor2 = 12    # Temperatura em graus Celsius (dentro do intervalo de 0 a 50)
-valor_sensor3 = 44    # Umidade relativa do ar em % (dentro do intervalo de 0 a 100)
-valor_sensor4 = 6    # Velocidade do vento em km/h (dentro do intervalo de 0 a 20)
-valor_sensor5 = 960   # Leitura do sensor de barômetro em hPa (dentro do intervalo definido)
+valor_sensor1 = 7000  # Intensidade de luz em lux (dentro do intervalo de 0 a 10000)
+valor_sensor2 = 25    # Temperatura em graus Celsius (dentro do intervalo de 0 a 50)
+valor_sensor3 = 50    # Umidade relativa do ar em % (dentro do intervalo de 0 a 100)
+valor_sensor4 = 20    # Velocidade do vento em km/h (dentro do intervalo de 0 a 20)
+valor_sensor5 = 1000   # Leitura do sensor de barômetro em hPa (dentro do intervalo definido)
 
 # Atribuindo os valores aos antecedentes do sistema de controle
 simulacao.input['Sensor 1'] = valor_sensor1
