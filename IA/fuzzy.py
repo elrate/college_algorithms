@@ -111,7 +111,7 @@ simulacao = ctrl.ControlSystemSimulation(sistema_ctrl)
 valor_sensor1 = 7000  # Intensidade de luz em lux (dentro do intervalo de 0 a 10000)
 valor_sensor2 = 25    # Temperatura em graus Celsius (dentro do intervalo de 0 a 50)
 valor_sensor3 = 50    # Umidade relativa do ar em % (dentro do intervalo de 0 a 100)
-valor_sensor4 = 1000   # Leitura do sensor de barômetro em hPa (dentro do intervalo definido)
+valor_sensor4 = 1000   # Leitura do sensor de barômetro em hPa (dentro do intervalo de 900 a 1100)
 
 # Atribuindo os valores aos antecedentes do sistema de controle
 simulacao.input['Sensor 1'] = valor_sensor1
