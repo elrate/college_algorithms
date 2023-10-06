@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 sensor1 = ctrl.Antecedent(np.arange(0, 10001, 1), 'Sensor 1')  # Luz (intensidade de luz em lux)
 sensor2 = ctrl.Antecedent(np.arange(0, 51, 1), 'Sensor 2')   # Temperatura (em graus Celsius)
 sensor3 = ctrl.Antecedent(np.arange(0, 101, 1), 'Sensor 3')    # Umidade relativa do ar (%)
-sensor4 = ctrl.Antecedent(np.arange(0, 21, 1), 'Sensor 4')     # Velocidade do vento (em km/h)
-sensor5 = ctrl.Antecedent(np.arange(900, 1101, 1), 'Sensor 5') # Barômetro (hPa)
+sensor4 = ctrl.Antecedent(np.arange(900, 1101, 1), 'Sensor 4') # Barômetro (hPa)
 
 # Definindo o consequente (previsão do tempo)
 previsao = ctrl.Consequent(np.arange(0, 101, 1), 'Previsao Tempo')
@@ -35,42 +34,33 @@ sensor3['medio'] = fuzz.gaussmf(sensor3.universe, 50, 10)
 sensor3['alto'] = fuzz.trimf(sensor3.universe, [60, 73, 85])
 sensor3['muito_alto'] = fuzz.trapmf(sensor3.universe, [80, 90, 100, 100])
 
-# Funções de pertinência para o Sensor 4 (Velocidade do vento em km/h)
-sensor4['muito_baixo'] = fuzz.trapmf(sensor4.universe, [0, 0, 3, 5])
-sensor4['baixo'] = fuzz.trimf(sensor4.universe, [3, 5, 7])
-sensor4['medio'] = fuzz.gaussmf(sensor4.universe, 10, 2)
-sensor4['alto'] = fuzz.trimf(sensor4.universe, [13, 15, 17])
-sensor4['muito_alto'] = fuzz.trapmf(sensor4.universe, [15, 17, 20, 20])
-
 # Funções de pertinência para o Sensor 5 (Pressão atmosférica em hpa)
-sensor5['muito_baixo'] = fuzz.trapmf(sensor5.universe, [900, 900, 925, 950])
-sensor5['baixo'] = fuzz.trimf(sensor5.universe, [935, 955, 975])
-sensor5['medio'] = fuzz.gaussmf(sensor5.universe, 1000, 10)
-sensor5['alto'] = fuzz.trimf(sensor5.universe, [1025, 1045, 1065])
-sensor5['muito_alto'] = fuzz.trapmf(sensor5.universe, [1050, 1075, 1100, 1100])
+sensor4['muito_baixo'] = fuzz.trapmf(sensor4.universe, [900, 900, 925, 950])
+sensor4['baixo'] = fuzz.trimf(sensor4.universe, [935, 955, 975])
+sensor4['medio'] = fuzz.gaussmf(sensor4.universe, 1000, 10)
+sensor4['alto'] = fuzz.trimf(sensor4.universe, [1025, 1045, 1065])
+sensor4['muito_alto'] = fuzz.trapmf(sensor4.universe, [1050, 1075, 1100, 1100])
 
 previsao['desativado'] = fuzz.trimf(previsao.universe, [0, 0, 50])
 previsao['ativado'] = fuzz.trimf(previsao.universe, [30, 100, 100])
 
 
-# Exemplo de regras para todas as combinações de sensores
+# Regras para todas as combinações de sensores
 
 regra1 = ctrl.Rule(
     (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
     (sensor2['muito_baixo'] | sensor2['baixo']) &
     (sensor3['medio'] | sensor3['alto'] | sensor3['muito_alto']) &
-    (sensor4['medio'] | sensor4['alto'] | sensor4['muito_alto']) &
-    (sensor5['muito_baixo'] | sensor5['baixo']),
+    (sensor4['muito_baixo'] | sensor4['baixo']),
     previsao['desativado']
-) # Condições Perfeitas de Chuva
+) # Condição Perfeita de Chuva
 regra2 = ctrl.Rule(
     (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto'])  &
     (sensor2['medio']) &
     (sensor3['alto'] | sensor3['muito_alto']) &
-    (sensor4['medio'] | sensor4['alto'] | sensor4['muito_alto']) &
-    (sensor5['medio']),
+    (sensor4['medio']),
     previsao['desativado']
-) # Umidade muita alta de dia com temperatura e pressão media e com vento
+) # Umidade muita alta de dia com temperatura e pressão media
 regra3 = ctrl.Rule(
     (sensor1['muito_baixo'] | sensor1['baixo']),
     previsao['desativado']
@@ -79,40 +69,35 @@ regra4 = ctrl.Rule(
     (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
     (sensor2['medio'] | sensor2['alto'] | sensor2['muito_alto']) &
     (sensor3['muito_baixo'] | sensor3['baixo']) &
-    (sensor4['muito_baixo'] | sensor4['baixo'] | sensor4['medio']) &
-    (sensor5['medio'] | sensor5['alto'] | sensor5['muito_alto']),
+    (sensor4['medio'] | sensor4['alto'] | sensor4['muito_alto']),
     previsao['ativado']
 ) # Condições Perfeita de Sol
 regra5 = ctrl.Rule(
     (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
     (sensor2['muito_alto']) &
     (sensor3['medio']) &
-    (sensor4['muito_baixo'] | sensor4['baixo']  | sensor4['medio']) &
-    (sensor5['muito_alto']),
+    (sensor4['muito_alto']),
     previsao['ativado']
-) # Temperatura e pressão muito alta, umidade media e vento muito baixo -> médio
+) # Temperatura e pressão muito alta, umidade media
 regra6 = ctrl.Rule(
     (sensor1['alto'] | sensor1['muito_alto']) &
     (sensor2['alto'] | sensor2['muito_alto']) &
     (sensor3['alto'] | sensor3['muito_alto']) &
-    (sensor4['alto'] | sensor4['muito_alto']) &
-    (sensor5['alto'] | sensor5['muito_alto']),
+    (sensor4['alto'] | sensor4['muito_alto']),
     previsao['ativado']
 ) # Tudo alto e muito alto
 regra7 = ctrl.Rule(
     (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
     (sensor2['baixo'] | sensor2['muito_baixo']) &
     (sensor3['baixo'] | sensor3['muito_baixo']) &
-    (sensor4['baixo'] | sensor4['muito_baixo']) &
-    (sensor5['baixo'] | sensor5['muito_baixo']),
+    (sensor4['baixo'] | sensor4['muito_baixo']),
     previsao['ativado']
 ) # Tudo baixo e muito baixo
 regra8 = ctrl.Rule(
     (sensor1['medio'] | sensor1['alto'] | sensor1['muito_alto']) &
     (sensor2['medio']) &
     (sensor3['medio']) &
-    (sensor4['medio']) &
-    (sensor5['medio']),
+    (sensor4['medio']),
     previsao['ativado']
 ) # Tudo Médio
 
@@ -126,15 +111,13 @@ simulacao = ctrl.ControlSystemSimulation(sistema_ctrl)
 valor_sensor1 = 7000  # Intensidade de luz em lux (dentro do intervalo de 0 a 10000)
 valor_sensor2 = 25    # Temperatura em graus Celsius (dentro do intervalo de 0 a 50)
 valor_sensor3 = 50    # Umidade relativa do ar em % (dentro do intervalo de 0 a 100)
-valor_sensor4 = 20    # Velocidade do vento em km/h (dentro do intervalo de 0 a 20)
-valor_sensor5 = 1000   # Leitura do sensor de barômetro em hPa (dentro do intervalo definido)
+valor_sensor4 = 1000   # Leitura do sensor de barômetro em hPa (dentro do intervalo definido)
 
 # Atribuindo os valores aos antecedentes do sistema de controle
 simulacao.input['Sensor 1'] = valor_sensor1
 simulacao.input['Sensor 2'] = valor_sensor2
 simulacao.input['Sensor 3'] = valor_sensor3
 simulacao.input['Sensor 4'] = valor_sensor4
-simulacao.input['Sensor 5'] = valor_sensor5
 
 # Computando a saída
 simulacao.compute()
@@ -167,13 +150,6 @@ plt.show()
 
 # Visualização do Sensor 4
 sensor4.view()
-plt.xlabel('Velocidade do Vento (km/h)')
-plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência - Sensor de Vento')
-plt.show()
-
-# Visualização do Sensor 5
-sensor5.view()
 plt.xlabel('Pressão Atmosférica (hPa)')
 plt.ylabel('Pertinência')
 plt.title('Funções de Pertinência - Sensor de Barômetro')
