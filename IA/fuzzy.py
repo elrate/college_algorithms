@@ -34,7 +34,7 @@ sensor3['medio'] = fuzz.gaussmf(sensor3.universe, 50, 10)
 sensor3['alto'] = fuzz.trimf(sensor3.universe, [60, 73, 85])
 sensor3['muito_alto'] = fuzz.trapmf(sensor3.universe, [80, 90, 100, 100])
 
-# Funções de pertinência para o Sensor 5 (Pressão atmosférica em hpa)
+# Funções de pertinência para o Sensor 4 (Pressão atmosférica em hpa)
 sensor4['muito_baixo'] = fuzz.trapmf(sensor4.universe, [900, 900, 925, 950])
 sensor4['baixo'] = fuzz.trimf(sensor4.universe, [935, 955, 975])
 sensor4['medio'] = fuzz.gaussmf(sensor4.universe, 1000, 10)
