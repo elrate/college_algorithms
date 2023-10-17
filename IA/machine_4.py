@@ -1,19 +1,15 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC  # Importar o SVM (Support Vector Machine)
+from sklearn.svm import SVC
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import confusion_matrix
 
 # Carregar os dados do arquivo CSV (substitua 'seuarquivo.csv' pelo caminho real)
-df = pd.read_csv('C:/Codigos/IA/dados_tempo_2.csv', sep=';')
-
-# Corrigir as vírgulas nos valores de todas as colunas numéricas e converter para float
-colunas_numericas = ['umidade', 'temperatura', 'velocidade', 'precipitacao']
-df[colunas_numericas] = df[colunas_numericas].apply(lambda x: x.str.replace(',', '.').astype(float))
+df = pd.read_csv('C:/Codigos/IA/dados-ano-2023.csv', sep=';', decimal=',')
 
 # Preparar os dados
-X = df[['umidade', 'temperatura', 'velocidade', 'precipitacao']]
+X = df[['umidade', 'temperatura', 'pressao', 'precipitacao']]
 
 # Preencher valores ausentes com a média da coluna
 imputer = SimpleImputer(strategy='mean')
@@ -48,13 +44,17 @@ probabilidade_choveu_svm = probabilidades_svm[:, 1]
 numero_de_probabilidades = probabilidades_rf.shape[0]
 print(f'Número de probabilidades: {numero_de_probabilidades}')
 
-# Exibir as probabilidades do modelo RandomForest
-print("Probabilidades do modelo RandomForest:")
-print(probabilidade_choveu_rf)
+# Exibir as probabilidades do modelo RandomForest em um arquivo
+print("Salvando as probabilidades do modelo RandomForest em um arquivo...")
+with open('probabilidades_random_forest.txt', 'w') as f:
+    for prob in probabilidade_choveu_rf:
+        f.write(str(prob) + '\n')
 
-# Exibir as probabilidades do modelo SVM
-print("Probabilidades do modelo SVM:")
-print(probabilidade_choveu_svm)
+# Exibir as probabilidades do modelo SVM em um arquivo
+print("Salvando as probabilidades do modelo SVM em um arquivo...")
+with open('probabilidades_svm.txt', 'w') as f:
+    for prob in probabilidade_choveu_svm:
+        f.write(str(prob) + '\n')
 
 # Avalie o desempenho do modelo SVM com uma matriz de confusão
 matriz_confusao_svm = confusion_matrix(y_test, modelo_svm.predict(X_test))
