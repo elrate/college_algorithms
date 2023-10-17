@@ -60,3 +60,15 @@ with open('probabilidades_svm.txt', 'w') as f:
 matriz_confusao_svm = confusion_matrix(y_test, modelo_svm.predict(X_test))
 print("Matriz de Confusão do modelo SVM:")
 print(matriz_confusao_svm)
+
+# Salvar o modelo treinado em um arquivo
+import joblib
+
+joblib.dump(modelo_rf, 'modelo_random_forest.pkl')
+joblib.dump(modelo_svm, 'modelo_svm.pkl')
+
+# Carregar o modelo treinado de um arquivo
+modelo_rf_carregado = joblib.load('modelo_random_forest.pkl')
+modelo_svm_carregado = joblib.load('modelo_svm.pkl')
+
+
