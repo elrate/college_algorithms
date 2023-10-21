@@ -107,12 +107,32 @@ sistema_ctrl = ctrl.ControlSystem([regra1,regra2,regra3,regra4,regra5,regra6,reg
 # Criando uma simulação
 simulacao = ctrl.ControlSystemSimulation(sistema_ctrl)
 
-# Valores dos sensores
-valor_sensor1 = 7000  # Intensidade de luz em lux (dentro do intervalo de 0 a 10000)
-valor_sensor2 = 25    # Temperatura em graus Celsius (dentro do intervalo de 0 a 50)
-valor_sensor3 = 50    # Umidade relativa do ar em % (dentro do intervalo de 0 a 100)
-valor_sensor4 = 1000   # Leitura do sensor de barômetro em hPa (dentro do intervalo de 900 a 1100)
+# Inicialize as variáveis com valores padrão
+valor_sensor1 = 0.0
+valor_sensor2 = 0.0
+valor_sensor3 = 0.0
+valor_sensor4 = 0.0
 
+# Abra o arquivo e leia os valores
+with open('C:/Codigos/IA/entradas/valores_fuzzy.txt', 'r') as file:
+    for line in file:
+        parts = line.split('=')
+        if len(parts) == 2:
+            variable_name = parts[0].strip()
+            value = parts[1].strip()
+            try:
+                value = float(value)
+                if variable_name == 'Luz':
+                    valor_sensor1 = value
+                elif variable_name == 'Temperatura':
+                    valor_sensor2 = value
+                elif variable_name == 'Umidade':
+                    valor_sensor3 = value
+                elif variable_name == 'Pressao':
+                    valor_sensor4 = value
+            except ValueError:
+                print(f'Erro ao converter valor em {variable_name} para float')
+                
 # Atribuindo os valores aos antecedentes do sistema de controle
 simulacao.input['Sensor 1'] = valor_sensor1
 simulacao.input['Sensor 2'] = valor_sensor2

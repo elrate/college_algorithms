@@ -1,0 +1,4 @@
+Luz = 7000.0
+Temperatura = 25.0
+Umidade = 50.0
+Pressao = 1000.0

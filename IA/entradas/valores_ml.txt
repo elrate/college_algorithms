@@ -1,0 +1,3 @@
+umidade = 90.0
+temperatura = 20.9
+pressao = 883.5
