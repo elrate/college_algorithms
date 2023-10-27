@@ -145,6 +145,16 @@ simulacao.compute()
 # Obtendo a saída
 probabilidade_tempo = simulacao.output['Previsao Tempo']
 print(f'Previsão do tempo(%): {probabilidade_tempo:.2f}%')
+# Realizando a transformação para que os valores estejam entre 0 e 1
+# Se probabilidade_tempo for menor ou igual a 40%, definir como 0; caso contrário, definir como 1
+if probabilidade_tempo <= 40:
+    valor_saida = 0
+else:
+    valor_saida = 1
+
+# Escrevendo a saída em um arquivo "saida_fuzzy.txt"
+with open('C:/Codigos/IA/saidas/saida_fuzzy.txt', 'w') as file:
+    file.write(str(valor_saida))
 
 # Visualizando as funções de pertinência
 # Visualização do Sensor 1
