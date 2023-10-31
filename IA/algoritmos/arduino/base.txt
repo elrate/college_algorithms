@@ -1,0 +1,36 @@
+int receivedValue;
+void setup() {
+  Serial.begin(9600);
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  float luz = 7000.0; // Valor de exemplo para a luz
+  float temperatura = 25.0;
+  float umidade = 50.0;
+  float pressao = 1000.0;
+
+  Serial.print("Luz = ");
+  Serial.println(luz);
+  Serial.print("Temperatura = ");
+  Serial.println(temperatura);
+  Serial.print("Umidade = ");
+  Serial.println(umidade);
+  Serial.print("Pressao = ");
+  Serial.println(pressao);
+  delay(10000); // Atraso de 10 segundos entre as leituras
+
+
+  if (Serial.available() > 0) {
+    receivedValue = Serial.read() - '0'; // Converte o caractere recebido em um valor numérico (0 ou 1)
+    // Faça algo com receivedValue, por exemplo:
+    Serial.println(receivedValue);
+     if (receivedValue == 0) {
+      digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+      delay(1000);  
+    } else if (receivedValue == 1) {
+      digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+      delay(1000); 
+    }
+  }
+}

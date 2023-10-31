@@ -132,7 +132,6 @@ with open('C:/Codigos/IA/entradas/valores_fuzzy.txt', 'r') as file:
                     valor_sensor4 = value
             except ValueError:
                 print(f'Erro ao converter valor em {variable_name} para float')
-                
 # Atribuindo os valores aos antecedentes do sistema de controle
 simulacao.input['Sensor 1'] = valor_sensor1
 simulacao.input['Sensor 2'] = valor_sensor2
@@ -158,55 +157,55 @@ with open('C:/Codigos/IA/saidas/saida_fuzzy.txt', 'w') as file:
 
 # Visualizando as funções de pertinência
 # Visualização do Sensor 1
-sensor1.view()
-plt.xlabel('Intensidade de Luz (lux)')
-plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência - Sensor de Luz')
-plt.show()
+#sensor1.view()
+#plt.xlabel('Intensidade de Luz (lux)')
+#plt.ylabel('Pertinência')
+#plt.title('Funções de Pertinência - Sensor de Luz')
+#plt.show()
 
 # Visualização do Sensor 2
-sensor2.view()
-plt.xlabel('Temperatura (°C)')
-plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência - Sensor de Temperatura')
-plt.show()
+#sensor2.view()
+#plt.xlabel('Temperatura (°C)')
+#plt.ylabel('Pertinência')
+#plt.title('Funções de Pertinência - Sensor de Temperatura')
+#plt.show()
 
 # Visualização do Sensor 3
-sensor3.view()
-plt.xlabel('Umidade Relativa do Ar (%)')
-plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência - Sensor de Umidade')
-plt.show()
+#sensor3.view()
+#plt.xlabel('Umidade Relativa do Ar (%)')
+#plt.ylabel('Pertinência')
+#plt.title('Funções de Pertinência - Sensor de Umidade')
+#plt.show()
 
 # Visualização do Sensor 4
-sensor4.view()
-plt.xlabel('Pressão Atmosférica (hPa)')
-plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência - Sensor de Barômetro')
-plt.show()
+#sensor4.view()
+#plt.xlabel('Pressão Atmosférica (hPa)')
+#plt.ylabel('Pertinência')
+#plt.title('Funções de Pertinência - Sensor de Barômetro')
+#plt.show()
 
 # Probabilidade Do Tempo
-previsao.view()
-plt.xlabel('Previsão do Tempo (%)')
-plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência - Probabilidade de sol e chuva')
-plt.show()
+#previsao.view()
+#plt.xlabel('Previsão do Tempo (%)')
+#plt.ylabel('Pertinência')
+#plt.title('Funções de Pertinência - Probabilidade de sol e chuva')
+#plt.show()
 
 # Obtendo a saída (porcentagem da probabilidade do tempo)
 probabilidade_tempo = simulacao.output['Previsao Tempo']
 
 # Plotando as funções de previsao do tempo
-previsao.view(sim=simulacao)
+#previsao.view(sim=simulacao)
 
 # Adicionando uma linha vertical indicando o ponto de acionamento
-plt.axvline(x=probabilidade_tempo, color='red', linestyle='--', label=f'Nível: {probabilidade_tempo:.2f}%')
+#plt.axvline(x=probabilidade_tempo, color='red', linestyle='--', label=f'Nível: {probabilidade_tempo:.2f}%')
 
 # Configurando o gráfico
-plt.legend()
-plt.xlabel('Probabilidade da Previsão do Tempo')
-plt.ylabel('Pertinência')
-plt.title('Funções de Pertinência da Previsão do Tempo')
+#plt.legend()
+#plt.xlabel('Probabilidade da Previsão do Tempo')
+#plt.ylabel('Pertinência')
+#plt.title('Funções de Pertinência da Previsão do Tempo')
 
 
 # Exibindo o gráfico
-plt.show()
+#plt.show()

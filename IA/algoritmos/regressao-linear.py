@@ -33,9 +33,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # Se o modelo já foi treinado, não é necessário treiná-lo novamente
 if 'modelo_linear.pkl' in os.listdir():
     modelo_linear = joblib.load('modelo_linear.pkl')
-    print('Sim')
 else:
-    print('Nao')
     # Criar e treinar o modelo de Regressão Linear
     modelo_linear = LinearRegression()
     modelo_linear.fit(X_train, y_train)  # Treine o modelo aqui
@@ -62,9 +60,9 @@ with open('C:/Codigos/IA/entradas/valores_ml.txt', 'r') as file:
 novos_dados = pd.read_csv('C:/Codigos/IA/dados/novos_dados.csv', sep=';', decimal=',')
 
 # Ajustar as colunas do DataFrame com os valores lidos do arquivo .txt
-novos_dados['umidade'] = data['umidade']
-novos_dados['temperatura'] = data['temperatura']
-novos_dados['pressao'] = data['pressao']
+novos_dados['umidade'] = data['Umidade']
+novos_dados['temperatura'] = data['Temperatura']
+novos_dados['pressao'] = data['Pressao']
 
 # Pré-processe os novos dados da mesma maneira que fez com os dados de treinamento
 X_novos = novos_dados[['umidade', 'temperatura', 'pressao']]
