@@ -143,7 +143,14 @@ simulacao.compute()
 
 # Obtendo a saída
 probabilidade_tempo = simulacao.output['Previsao Tempo']
+print("Valores:")
+print("Luz = 930.00\nTemperatura = 25.00\nUmidade = 50.00\nPressao = 900.00")
+print("Fuzzy:")
 print(f'Previsão do tempo(%): {probabilidade_tempo:.2f}%')
+if probabilidade_tempo > 40:
+    print("Resultado = [1]")
+else: 
+    print("Resultado = [0]")
 # Realizando a transformação para que os valores estejam entre 0 e 1
 # Se probabilidade_tempo for menor ou igual a 40%, definir como 0; caso contrário, definir como 1
 if probabilidade_tempo <= 40:
